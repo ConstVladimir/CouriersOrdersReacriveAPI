@@ -1,7 +1,9 @@
 package ru.yandex.yandexlavka.model.courier;
 
-import java.util.ArrayList;
+import lombok.Data;
 
+import java.util.ArrayList;
+@Data
 public class CreateCouriersResponse {
     ArrayList<CourierDto> couriers;
 }

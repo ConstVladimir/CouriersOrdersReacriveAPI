@@ -1,12 +1,14 @@
 package ru.yandex.yandexlavka.model.order;
 
-import java.util.ArrayList;
+import lombok.Data;
 
+import java.util.ArrayList;
+@Data
 public class CreateOrderDto {
-    float weight;
-    int regions;
+    Double weight;
+    Integer regions;
     ArrayList<String> delivery_hours;
-    int cost;
+    Integer cost;
 }
 
 /*

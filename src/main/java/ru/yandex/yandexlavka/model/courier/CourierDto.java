@@ -3,13 +3,15 @@ package ru.yandex.yandexlavka.model.courier;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 @Data
 @Entity
 @Table(name = "couriers")
-public class CourierDto {
+public class CourierDto implements Serializable {
+    private static final long serialVersionUID = 1l;
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     long courier_id;
