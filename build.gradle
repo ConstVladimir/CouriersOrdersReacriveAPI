@@ -38,6 +38,7 @@ shadowJar {
 }
 
 bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Start-Class': 'ru.yandex.yandexlavka.YandexLavkaApplication'
     }

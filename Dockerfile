@@ -1,6 +1,6 @@
 FROM openjdk:17.0.1-jdk-slim
 
-ARG JAR_FILE=build/libs/*SNAPSHOT-all.jar
+ARG JAR_FILE=build/libs/*.jar
 
 WORKDIR /opt/app
 
