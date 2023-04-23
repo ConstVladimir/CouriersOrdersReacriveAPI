@@ -11,32 +11,31 @@ import ru.yandex.yandexlavka.model.courier.GetCouriersResponse;
 import ru.yandex.yandexlavka.services.CourierService;
 
 @RestController
+@RequestMapping(value = "/couriers")
 public class CourierController {
     CourierService courierService;
-
     CourierController(CourierService courierService){ this.courierService=courierService;}
-
-    @PostMapping("/couriers")
-    public ResponseEntity<?> createCourier(@RequestBody CreateCourierRequest createCourierRequest) {
+    @PostMapping("")
+    public ResponseEntity<CreateCouriersResponse> createCourier(@RequestBody CreateCourierRequest createCourierRequest) {
         CreateCouriersResponse createCouriersResponse = courierService.createCourier(createCourierRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(createCouriersResponse);
     }
-    @GetMapping("/couriers/{courier_id}")
+    @GetMapping("/{courier_id}")
     public ResponseEntity<?> getCouriers(@PathVariable long courier_id){
         CourierDto needCourier = courierService.GetCourierById(courier_id);
         if (needCourier == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("{}");
+                    .body(new NotFoundResponse());
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(needCourier);
     }
-    @GetMapping("/couriers")
-    public ResponseEntity<?> getCouriers(@RequestParam(required = false, defaultValue = "1") Integer limit, @RequestParam(required = false, defaultValue = "0") Integer offset){
+    @GetMapping("")
+    public ResponseEntity<GetCouriersResponse> getCouriers(@RequestParam(required = false, defaultValue = "1") Integer limit, @RequestParam(required = false, defaultValue = "0") Integer offset){
         GetCouriersResponse getCouriersResponse = courierService.getCouriersResponse(limit, offset);
         return ResponseEntity
                 .status(HttpStatus.OK)

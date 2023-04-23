@@ -29,10 +29,9 @@ public class CourierService {
         //Pageable pageable = PageRequest.of(offset, limit);;
         //Page<CourierDto> courierDtoPage = couriersRepository.findAll(pageable);
 
-        ArrayList<CourierDto> courierDtoArrayList = new ArrayList<>();
         //courierDtoArrayList.addAll(courierDtoPage.toList());
 
-        courierDtoArrayList.addAll(couriersRepository.findAllOffsetLimit(offset,limit));
+        ArrayList<CourierDto> courierDtoArrayList = new ArrayList<>(couriersRepository.findAllOffsetLimit(offset, limit));
 
         GetCouriersResponse getCouriersResponse = new GetCouriersResponse();
         getCouriersResponse.setCouriers(courierDtoArrayList);
@@ -41,7 +40,6 @@ public class CourierService {
         return  getCouriersResponse;
     }
     public CourierDto GetCourierById (long id){
-        CourierDto needCourier = couriersRepository.findById(id);
-        return  needCourier;
+        return couriersRepository.findById(id);
     }
 }

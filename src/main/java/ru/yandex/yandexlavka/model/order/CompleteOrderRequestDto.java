@@ -1,7 +1,9 @@
 package ru.yandex.yandexlavka.model.order;
 
-import java.util.ArrayList;
+import lombok.Data;
 
+import java.util.ArrayList;
+@Data
 public class CompleteOrderRequestDto {
     ArrayList<CompleteOrder> complete_info;
 }
