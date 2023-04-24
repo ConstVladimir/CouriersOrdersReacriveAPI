@@ -1,5 +1,6 @@
 package ru.yandex.yandexlavka.model.order;
 
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.util.ArrayList;

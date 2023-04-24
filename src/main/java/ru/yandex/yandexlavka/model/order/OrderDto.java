@@ -7,19 +7,19 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 @Data
-@Entity
-@Table(name = "orders")
- @SecondaryTable(name = "completeOrders",
-        pkJoinColumns = @PrimaryKeyJoinColumn(name = "order_id", referencedColumnName = "order_id"))
+//@Entity
+//@Table(name = "orders")
+// @SecondaryTable(name = "completeOrders",
+//        pkJoinColumns = @PrimaryKeyJoinColumn(name = "order_id", referencedColumnName = "order_id"))
 public class OrderDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long order_id;
-    double weight;
-    int regions;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long order_id;
+    Double weight;
+    Integer regions;
     ArrayList<String> delivery_hours;
-    int cost;
-    @Column(name="complete_time", table="completeOrders")
+    Integer cost;
+//    @Column(name="complete_time", table="completeOrders")
     OffsetDateTime completed_time;
 }
 

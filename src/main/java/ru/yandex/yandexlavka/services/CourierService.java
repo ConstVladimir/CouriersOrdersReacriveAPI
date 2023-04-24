@@ -26,10 +26,6 @@ public class CourierService {
         return  createCouriersResponse;
     }
     public GetCouriersResponse getCouriersResponse (int limit, int offset){
-        //Pageable pageable = PageRequest.of(offset, limit);;
-        //Page<CourierDto> courierDtoPage = couriersRepository.findAll(pageable);
-
-        //courierDtoArrayList.addAll(courierDtoPage.toList());
 
         ArrayList<CourierDto> courierDtoArrayList = new ArrayList<>(couriersRepository.findAllOffsetLimit(offset, limit));
 
