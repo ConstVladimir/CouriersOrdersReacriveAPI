@@ -3,11 +3,13 @@ package ru.yandex.yandexlavka.ratelimiter;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RateLimiter {
+    @Value("${app.rpm}")
     int rpm = 10;
     public ConcurrentHashMap <String, Bucket> bucketMap = new ConcurrentHashMap<>();
     private Bucket createBucket () {

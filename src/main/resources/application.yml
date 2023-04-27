@@ -1,0 +1,28 @@
+POSTGRES_SERVER: localhost
+POSTGRES_PORT: 5432
+POSTGRES_DB: postgres
+POSTGRES_USER: postgres
+POSTGRES_PASSWORD: postgres
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    initialization-mode: always
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+      javax:
+        persistence:
+          schema-generation.scripts.create-target: create.sql
+    hibernate:
+      ddl-auto: update
+javax:
+  persistence:
+    schema-generation:
+      scripts.action: create
+      create-source: metadata
+app:
+  rpm: 10
