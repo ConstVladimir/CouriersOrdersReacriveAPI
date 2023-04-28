@@ -18,7 +18,13 @@ public class CourierDto implements Serializable {
     String courier_type;
     ArrayList<Integer> regions;
     ArrayList<String> working_hours;
-
+    public static CourierDto getCourierDto (CreateCourierDto createCourierDto){
+        CourierDto courierDto = new CourierDto();
+        courierDto.setCourier_type(createCourierDto.getCourier_type());
+        courierDto.setRegions(createCourierDto.getRegions());
+        courierDto.setWorking_hours(createCourierDto.getWorking_hours());
+        return courierDto;
+    }
 }
 /*
 "CourierDto": {

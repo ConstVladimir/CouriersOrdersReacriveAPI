@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import lombok.NoArgsConstructor;
 import ru.yandex.yandexlavka.model.courier.CourierDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderDto;
 import ru.yandex.yandexlavka.model.order.OrderDto;
@@ -33,6 +34,14 @@ public class OrderDB  {
     @ManyToOne(targetEntity = CourierDto.class, fetch = FetchType.LAZY)
     private CourierDto courierDto;
 
+    public static OrderDB getOrderDB (CreateOrderDto createOrderDto){
+        OrderDB orderDB = new OrderDB();
+        orderDB.weight = createOrderDto.getWeight();
+        orderDB.regions = createOrderDto.getRegions();
+        orderDB.delivery_hours = new ArrayList<>(createOrderDto.getDelivery_hours());
+        orderDB.cost = createOrderDto.getCost();
+        return orderDB;
+    }
     public OrderDto getOrderDto(){
         OrderDto orderDto = new OrderDto();
         orderDto.setOrder_id(order_id);

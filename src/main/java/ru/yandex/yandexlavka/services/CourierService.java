@@ -5,24 +5,18 @@ import ru.yandex.yandexlavka.model.courier.*;
 import ru.yandex.yandexlavka.repositories.CouriersRepositoryInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CourierService {
     CouriersRepositoryInterface couriersRepository;
     CourierService(CouriersRepositoryInterface couriersRepository){this.couriersRepository=couriersRepository;}
+    public CreateCouriersResponse createCouriers (CreateCourierRequest createCourierRequest){
+        List<CourierDto> courierDtoList = createCourierRequest.getCouriers().stream().map(CourierDto::getCourierDto).toList();
+        couriersRepository.saveAll(courierDtoList);
 
-    public CreateCouriersResponse createCourier (CreateCourierRequest createCourierRequest){
-        ArrayList<CourierDto> courierDtoArrayList = new ArrayList<>();
-        for (CreateCourierDto courier : createCourierRequest.getCouriers()){
-            CourierDto courierDto = new CourierDto();
-            courierDto.setCourier_type(courier.getCourier_type().toString());
-            courierDto.setRegions(courier.getRegions());
-            courierDto.setWorking_hours(courier.getWorking_hours());
-            couriersRepository.save(courierDto);
-            courierDtoArrayList.add(courierDto);
-        }
         CreateCouriersResponse createCouriersResponse = new CreateCouriersResponse();
-        createCouriersResponse.setCouriers(courierDtoArrayList);
+        createCouriersResponse.setCouriers(courierDtoList);
         return  createCouriersResponse;
     }
     public GetCouriersResponse getCouriersResponse (int limit, int offset){
@@ -35,7 +29,7 @@ public class CourierService {
         getCouriersResponse.setLimit(limit);
         return  getCouriersResponse;
     }
-    public CourierDto GetCourierById (long id){
-        return couriersRepository.findById(id);
+    public CourierDto getCourierById(long id){
+        return couriersRepository.findById(id).get();
     }
 }

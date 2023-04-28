@@ -11,38 +11,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toCollection;
-
 @Service
 public class OrdersService {
     OrdersRepositoryInterface2 ordersRepository2;
     OrdersService(OrdersRepositoryInterface2 ordersRepository2){
         this.ordersRepository2=ordersRepository2;
     }
-
-    public ArrayList<OrderDto> createOrders (CreateOrderRequest createOrderRequest){
-        ArrayList<OrderDto> orderDtoArrayList = new ArrayList<>();
-        for (CreateOrderDto createOrderDto : createOrderRequest.getOrders()){
-            OrderDB orderDb = new OrderDB();
-            orderDb.setCost(createOrderDto.getCost());
-            orderDb.setWeight(createOrderDto.getWeight());
-            orderDb.setRegions(createOrderDto.getRegions());
-            orderDb.setDelivery_hours(createOrderDto.getDelivery_hours());
-
-            ordersRepository2.save(orderDb);
-            orderDtoArrayList.add(orderDb.getOrderDto());
-        }
-        return  orderDtoArrayList;
+    public List<OrderDto> createOrders (CreateOrderRequest createOrderRequest){
+        List<OrderDB> orderDBList = createOrderRequest.getOrders().stream().map(OrderDB::getOrderDB).toList();
+        ordersRepository2.saveAll(orderDBList);
+        List<OrderDto> orderDtoList = orderDBList.stream().map(OrderDB::getOrderDto).toList();
+        return  orderDtoList;
     }
-    public ArrayList<OrderDto> getOrdersResponse (int limit, int offset){
+    public List<OrderDto> getOrdersResponse (int limit, int offset){
         return ordersRepository2.findAllOffsetLimit(offset, limit)
                 .stream()
                 .map(OrderDB::getOrderDto)
-                .collect(toCollection(ArrayList::new));
+                .toList();
     }
-    public OrderDto GetOrderById (long id){
-        OrderDto needCourier = ordersRepository2.findById(id).get().getOrderDto();
-        return  needCourier;
+    public OrderDto getOrderById(long id){
+        return ordersRepository2.findById(id).get().getOrderDto();
     }
     public ArrayList<OrderDto> completeOrders  (CompleteOrderRequestDto completeOrderRequestDto) {
         ArrayList<OrderDto> orderDtoArrayList = new ArrayList<>();
@@ -55,7 +43,6 @@ public class OrdersService {
         }
         return orderDtoArrayList;
     }
-
     public List<OrderDB> getForCourierMetaInfo (long courier_id, LocalDate startDate, LocalDate endDate){
         return ordersRepository2.getForCourierMetaInfo(courier_id, startDate, endDate);
     }

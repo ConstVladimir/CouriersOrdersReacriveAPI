@@ -7,12 +7,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.yandexlavka.model.BadRequestResponse;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException  (EntityNotFoundException exception){
         return ResponseEntity
                 .badRequest()
+                .body("{}");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> handleNoSuchElementException  (NoSuchElementException exception){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body("{}");
     }
 }

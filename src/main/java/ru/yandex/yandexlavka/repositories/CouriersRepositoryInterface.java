@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface CouriersRepositoryInterface extends JpaRepository<CourierDto, Long> {
-    Page<CourierDto> findAll(Pageable pageable);
-    CourierDto findById (long courier_id);
     @Query(value = "SELECT * FROM couriers offset :offset rows fetch first :limit rows only;", nativeQuery = true)
     List<CourierDto> findAllOffsetLimit(
             @Param("offset") int offset,
