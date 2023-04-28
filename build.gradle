@@ -22,14 +22,12 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:7.6.0'
-    //implementation 'com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter'
-    //implementation 'org.springframework.boot:spring-boot-starter-cache'
-    //implementation 'javax.cache:cache-api'
-    //implementation 'com.github.ben-manes.caffeine:caffeine'
-    //implementation'com.github.ben-manes.caffeine:jcache'
-
-
-
+    implementation 'com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.9.0'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'javax.cache:cache-api'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    implementation'com.github.ben-manes.caffeine:jcache'
+    implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
 }
 
 

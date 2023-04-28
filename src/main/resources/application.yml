@@ -3,6 +3,8 @@ POSTGRES_PORT: 5432
 POSTGRES_DB: postgres
 POSTGRES_USER: postgres
 POSTGRES_PASSWORD: postgres
+app:
+  rpm: 1
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -19,10 +21,25 @@ spring:
           schema-generation.scripts.create-target: create.sql
     hibernate:
       ddl-auto: update
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
 javax:
   persistence:
     schema-generation:
       scripts.action: create
       create-source: metadata
-app:
-  rpm: 10
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      url: .*
+      http-response-body: "{ }"
+      rate-limits:
+        - bandwidths:
+          - capacity: 10
+            time: 1
+            unit: minutes
+          cache-key : getRequestURI()

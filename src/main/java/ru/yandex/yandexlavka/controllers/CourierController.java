@@ -22,25 +22,15 @@ public class CourierController {
     CourierService courierService;
     @Autowired
     OrdersService ordersService;
-    @Autowired
-    RateLimiter rateLimiter;
     @PostMapping("")
     public ResponseEntity<CreateCouriersResponse> createCourier(@RequestBody CreateCourierRequest createCourierRequest) {
-        Bucket bucket = rateLimiter.getBucket("createCourier");
-        if (bucket.tryConsume(1)){
             CreateCouriersResponse createCouriersResponse = courierService.createCourier(createCourierRequest);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(createCouriersResponse);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
-        }
     }
     @GetMapping("/{courier_id}")
     public ResponseEntity<?> getCouriers(@PathVariable long courier_id){
-        Bucket bucket = rateLimiter.getBucket("getCourier1");
-        if (bucket.tryConsume(1)) {
             CourierDto needCourier = courierService.GetCourierById(courier_id);
             if (needCourier == null) {
                 return ResponseEntity
@@ -50,30 +40,18 @@ public class CourierController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(needCourier);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
-        }
     }
     @GetMapping("")
     public ResponseEntity<GetCouriersResponse> getCouriers(@RequestParam(required = false, defaultValue = "1") Integer limit, @RequestParam(required = false, defaultValue = "0") Integer offset){
-        Bucket bucket = rateLimiter.getBucket("getCouriers");
-        if (bucket.tryConsume(1)) {
             GetCouriersResponse getCouriersResponse = courierService.getCouriersResponse(limit, offset);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(getCouriersResponse);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
-        }
     }
     @GetMapping("meta-info/{courier_id}")
     public ResponseEntity<?> getCourierMetaInfo (@PathVariable long courier_id,
                                                  @RequestParam LocalDate startDate,
                                                  @RequestParam LocalDate endDate){
-        Bucket bucket = rateLimiter.getBucket("getCourierMetaInfo");
-        if (bucket.tryConsume(1)) {
             CourierDto needCourier = courierService.GetCourierById(courier_id);
             if (needCourier == null) {
                 return ResponseEntity
@@ -115,9 +93,6 @@ public class CourierController {
             courierMetaInfoResponse.setRating(rating);
             return ResponseEntity.ok()
                     .body(courierMetaInfoResponse);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
-        }
+
     }
 }
