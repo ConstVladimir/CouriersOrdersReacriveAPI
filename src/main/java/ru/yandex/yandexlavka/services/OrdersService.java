@@ -10,6 +10,7 @@ import ru.yandex.yandexlavka.repositories.OrdersRepositoryInterface2;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrdersService {
@@ -36,7 +37,9 @@ public class OrdersService {
         ArrayList<OrderDto> orderDtoArrayList = new ArrayList<>();
         for (CompleteOrder completeOrder: completeOrderRequestDto.getComplete_info()){
             OrderDB existOrderDB = Hibernate.unproxy(ordersRepository2.getReferenceById(completeOrder.getOrder_id()), OrderDB.class);//existOrderDBOpt.get();
-            if (existOrderDB == null ||existOrderDB.getCourier_id() == null || existOrderDB.getCourier_id() != completeOrder.getCourier_id()) throw new EntityNotFoundException("Another courier_id");
+            if (existOrderDB == null
+                    ||existOrderDB.getCourier_id() == null
+                    || !Objects.equals(existOrderDB.getCourier_id(), completeOrder.getCourier_id())) throw new EntityNotFoundException("Another courier_id");
 
             existOrderDB.setCompleted_time(completeOrder.getComplete_time());
             orderDtoArrayList.add(existOrderDB.getOrderDto());

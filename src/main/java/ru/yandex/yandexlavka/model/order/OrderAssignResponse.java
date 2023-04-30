@@ -1,12 +1,13 @@
 package ru.yandex.yandexlavka.model.order;
 
+import lombok.Data;
 import ru.yandex.yandexlavka.model.courier.CouriersGroupOrders;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
-
+@Data
 public class OrderAssignResponse {
-    OffsetDateTime date;
+    LocalDate date;
     ArrayList<CouriersGroupOrders> couriers;
 }
 

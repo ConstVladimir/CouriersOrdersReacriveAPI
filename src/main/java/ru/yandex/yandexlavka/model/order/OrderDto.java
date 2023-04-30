@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 //@Entity
@@ -17,7 +18,7 @@ public class OrderDto {
     Long order_id;
     Double weight;
     Integer regions;
-    ArrayList<String> delivery_hours;
+    List<String> delivery_hours;
     Integer cost;
 //    @Column(name="complete_time", table="completeOrders")
     OffsetDateTime completed_time;

@@ -30,7 +30,9 @@ public class CourierController {
             return ResponseEntity.ok(courierService.getCourierById(courier_id));
     }
     @GetMapping("")
-    public ResponseEntity<GetCouriersResponse> getCouriers(@RequestParam(required = false, defaultValue = "1") Integer limit, @RequestParam(required = false, defaultValue = "0") Integer offset){
+    public ResponseEntity<GetCouriersResponse> getCouriers
+            (@RequestParam(required = false, defaultValue = "1") Integer limit,
+             @RequestParam(required = false, defaultValue = "0") Integer offset){
             return ResponseEntity.ok(courierService.getCouriersResponse(limit, offset));
     }
     @GetMapping("meta-info/{courier_id}")
@@ -40,11 +42,7 @@ public class CourierController {
             CourierDto needCourier = courierService.getCourierById(courier_id);
             List<OrderDB> orderDBList = ordersService.getForCourierMetaInfo(courier_id, startDate, endDate);
 
-            if (orderDBList.isEmpty()) {
-                return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(needCourier);
-            }
+            if (orderDBList.isEmpty()) return ResponseEntity.ok(needCourier);
 
             GetCourierMetaInfoResponse courierMetaInfoResponse = new GetCourierMetaInfoResponse(needCourier);
             courierMetaInfoResponse.setRatingAndEarnings(orderDBList, startDate, endDate);

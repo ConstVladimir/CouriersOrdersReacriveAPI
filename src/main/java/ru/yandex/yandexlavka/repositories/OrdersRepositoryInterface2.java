@@ -14,7 +14,9 @@ import java.util.List;
 
 public interface OrdersRepositoryInterface2 extends JpaRepository<OrderDB, Long> {
 
-    @Query(value = "SELECT o.order_id, o.cost, o.delivery_hours, o.regions, o.weight, o.completed_time, o.complete_time, o.courier_id FROM orders2 o offset :offset rows fetch first :limit rows only;", nativeQuery = true)
+    @Query(nativeQuery = true, value = "SELECT " +
+            "o.order_id, o.cost, o.delivery_hours, o.regions, o.weight, o.completed_time, o.complete_time, o.courier_id " +
+            "FROM orders2 o offset :offset rows fetch first :limit rows only;")
     List<OrderDB> findAllOffsetLimit(
             @Param("offset") int offset,
             @Param("limit") int limit);
@@ -27,12 +29,17 @@ public interface OrdersRepositoryInterface2 extends JpaRepository<OrderDB, Long>
             @Param("order_id") long order_id
     );
 
-    @Query(nativeQuery = true, value = "select " +
+    @Query(nativeQuery = true, value = "SELECT " +
             "o.order_id, o.cost, o.delivery_hours, o.regions, o.weight, o.completed_time, o.complete_time, o.courier_id " +
-            "from orders2 o " +
-            "where courier_id = :courier_id " +
+            "FROM orders2 o " +
+            "WHERE courier_id = :courier_id " +
             "AND completed_time>= :startDate AND completed_time< :endDate ;")
     List<OrderDB> getForCourierMetaInfo (@Param("courier_id") long courier_id,
                                           @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
+    @Query (nativeQuery = true, value = "SELECT " +
+            "o.order_id, o.cost, o.delivery_hours, o.regions, o.weight, o.completed_time, o.complete_time, o.courier_id " +
+            "FROM orders2 o " +
+            "WHERE complete_time IS NULL;")
+    List<OrderDB> getOrdersWhereCompleteTimeIsNULL ();
 }

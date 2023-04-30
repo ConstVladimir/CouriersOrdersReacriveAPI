@@ -9,8 +9,10 @@ import ru.yandex.yandexlavka.model.courier.CourierDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderDto;
 import ru.yandex.yandexlavka.model.order.OrderDto;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,7 +23,7 @@ public class OrderDB  {
     Long order_id;
     Double weight;
     Integer regions;
-    ArrayList<String> delivery_hours;
+    List<String> delivery_hours;
     @Nullable
     OffsetDateTime completed_time;
     Integer cost;
@@ -34,6 +36,8 @@ public class OrderDB  {
     @ManyToOne(targetEntity = CourierDto.class, fetch = FetchType.LAZY)
     private CourierDto courierDto;
 
+    @Transient
+    List<LocalTime> delivery_time_intervals;
     public static OrderDB getOrderDB (CreateOrderDto createOrderDto){
         OrderDB orderDB = new OrderDB();
         orderDB.weight = createOrderDto.getWeight();

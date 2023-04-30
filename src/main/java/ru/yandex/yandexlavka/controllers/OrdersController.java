@@ -8,6 +8,7 @@ import ru.yandex.yandexlavka.model.order.CompleteOrderRequestDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderRequest;
 import ru.yandex.yandexlavka.model.order.OrderAssignResponse;
 import ru.yandex.yandexlavka.model.order.OrderDto;
+import ru.yandex.yandexlavka.services.AssignService;
 import ru.yandex.yandexlavka.services.OrdersService;
 
 import java.time.LocalDate;
@@ -19,6 +20,8 @@ import java.util.List;
 public class OrdersController {
     @Autowired
     OrdersService ordersService;
+    @Autowired
+    AssignService assignService;
     @PostMapping("")
     public ResponseEntity<List<OrderDto>> createOrders(@RequestBody CreateOrderRequest createOrderRequest) {
             return ResponseEntity.ok(ordersService.createOrders(createOrderRequest));
@@ -37,10 +40,8 @@ public class OrdersController {
 
     }
     @PostMapping("/assign")
-    public ResponseEntity<?> ordersAssign (@RequestParam(required = false) LocalDate date){
+    public ResponseEntity<List<OrderAssignResponse>> ordersAssign (@RequestParam(required = false) LocalDate date){
             if (date == null) date = LocalDate.now();
-            ArrayList<OrderAssignResponse> orderAssignResponseArrayList = new ArrayList<>();
-
-            return ResponseEntity.accepted().body(orderAssignResponseArrayList);
+            return ResponseEntity.status(HttpStatus.CREATED).body(assignService.getOrderAssignResponse(date));
     }
 }

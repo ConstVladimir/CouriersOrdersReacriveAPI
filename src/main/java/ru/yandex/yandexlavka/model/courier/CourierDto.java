@@ -1,6 +1,7 @@
 package ru.yandex.yandexlavka.model.courier;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class CourierDto implements Serializable {
     String courier_type;
     ArrayList<Integer> regions;
     ArrayList<String> working_hours;
-    public static CourierDto getCourierDto (CreateCourierDto createCourierDto){
+    public static CourierDto getCourierDto (@NotNull CreateCourierDto createCourierDto){
         CourierDto courierDto = new CourierDto();
         courierDto.setCourier_type(createCourierDto.getCourier_type());
         courierDto.setRegions(createCourierDto.getRegions());
