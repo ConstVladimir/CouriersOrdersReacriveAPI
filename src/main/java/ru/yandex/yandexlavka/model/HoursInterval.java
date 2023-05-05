@@ -2,41 +2,58 @@ package ru.yandex.yandexlavka.model;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HoursInterval {
-    final LocalTime start;
-    final LocalTime end;
+    final int start;
+    final int end;
     final String intervalString;
 
-    HoursInterval(@NotNull String intervalString){
+    public HoursInterval(@NotNull String intervalString){
         this.intervalString=intervalString;
-        int[] splitIntervalString = Arrays.stream(intervalString.split("[-:]")).mapToInt(Integer::parseInt).toArray();
-        start = LocalTime.of(splitIntervalString[0],splitIntervalString[1]);
-        end = LocalTime.of(splitIntervalString[2], splitIntervalString[3]);
-        if (start.isAfter(end)) throw new RuntimeException("HoursInterval constructor: start.isAfter(end)");
+        String[] splitIntervalString = intervalString.split("[-:]");
+
+        start = Integer.parseInt(splitIntervalString[0])*60 + Integer.parseInt(splitIntervalString[1]);
+
+        if (start > 0 && splitIntervalString[2].equals("00") && splitIntervalString[3].equals("00"))
+            end = 1440;
+        else
+            end = Integer.parseInt(splitIntervalString[2])*60 + Integer.parseInt(splitIntervalString[3]);
+
+        if (start > end) throw new RuntimeException("HoursInterval constructor: start.isAfter(end)");
     }
 
-    HoursInterval (@NotNull LocalTime start, @NotNull LocalTime end){
-        this.start = start;
-        this.end = end;
-        intervalString = start.toString().substring(0,5)+"-"+end.toString().substring(0,5);
+    public HoursInterval (int startInMin, int endInMin){
+        start = startInMin;
+        end = endInMin;
+        int var;
+        String HHstart;
+        String MMstart;
+        String HHend;
+        String MMend;
+        if ((var=(start/60) % 24)<10) HHstart = "0"+var;
+        else HHstart = String.valueOf(var);
+        if ((var=start%60) < 10) MMstart = "0"+var;
+        else MMstart = String.valueOf(var);
+
+        if ((var=(end/60) % 24)<10) HHend = "0"+var;
+        else HHend = String.valueOf(var);
+        if ((var=end%60) < 10) MMend = "0"+var;
+        else MMend = String.valueOf(var);
+
+        intervalString = String.join("", HHstart, ":", MMstart,"-",HHend,":",MMend);
     }
 
     boolean isIntersect (@NotNull HoursInterval twoInterval){
-        return !this.end.isBefore(twoInterval.start) && !this.start.isAfter(twoInterval.end);
+        return !(this.end < twoInterval.start) && !(this.start > twoInterval.end);
     }
 
     HoursInterval getIntersect (HoursInterval twoInterval){
         if (this.isIntersect(twoInterval)) {
-            LocalTime interStart;
-            LocalTime interEnd;
-            if (this.start.isAfter(twoInterval.start)) interStart = this.start;
-            else interStart = twoInterval.start;
-            if (this.end.isAfter(twoInterval.end)) interEnd = twoInterval.end;
-            else  interEnd = this.end;
+            int interStart;
+            int interEnd;
+            interStart = Math.max(this.start, twoInterval.start);
+            interEnd = Math.min(this.end, twoInterval.end);
             return  new HoursInterval(interStart, interEnd);
         }
         return null;
@@ -49,8 +66,8 @@ public class HoursInterval {
             if (!this.intervalString.equals(intersectInterval.intervalString)){
                 HoursInterval left = new HoursInterval(this.start, intersectInterval.start);
                 HoursInterval right = new HoursInterval(intersectInterval.end, this.end);
-                if (!this.start.equals(intersectInterval.start)) hoursIntervalArrayList.add(new HoursInterval(left.start, left.end.minusMinutes(1)));
-                if (!this.end.equals(intersectInterval.end)) hoursIntervalArrayList.add(new HoursInterval(right.start.plusMinutes(1), right.end));
+                if (!(this.start==intersectInterval.start)) hoursIntervalArrayList.add(new HoursInterval(left.start, left.end-1));
+                if (!(this.end==intersectInterval.end)) hoursIntervalArrayList.add(new HoursInterval(right.start+1, right.end));
             }
         }
         else hoursIntervalArrayList.add(new HoursInterval(this.intervalString));

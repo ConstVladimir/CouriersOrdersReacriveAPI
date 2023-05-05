@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import lombok.NoArgsConstructor;
+import ru.yandex.yandexlavka.model.HoursInterval;
 import ru.yandex.yandexlavka.model.courier.CourierDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderDto;
 import ru.yandex.yandexlavka.model.order.OrderDto;
@@ -13,6 +14,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -37,7 +39,11 @@ public class OrderDB  {
     private CourierDto courierDto;
 
     @Transient
-    List<LocalTime> delivery_time_intervals;
+    List<HoursInterval> delivery_time_intervals;
+
+    void setDeliveryTimeIntervals(){
+        delivery_time_intervals = delivery_hours.stream().map(HoursInterval::new).collect(Collectors.toList());
+    }
     public static OrderDB getOrderDB (CreateOrderDto createOrderDto){
         OrderDB orderDB = new OrderDB();
         orderDB.weight = createOrderDto.getWeight();
