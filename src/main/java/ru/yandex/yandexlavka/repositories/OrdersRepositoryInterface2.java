@@ -5,8 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.yandexlavka.model.order.OrderDto;
-import ru.yandex.yandexlavka.model.order.kvv.OrderDB;
+import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;

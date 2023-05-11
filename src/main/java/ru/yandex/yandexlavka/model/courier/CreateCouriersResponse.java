@@ -1,18 +1,14 @@
 package ru.yandex.yandexlavka.model.courier;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class CreateCouriersResponse {
-    List<CourierDto> couriers;
+    @NotEmpty(message = "Mustn't be empty")
+    List<@NotNull CourierDto> couriers;
 }
-
-/*
-"CreateCouriersResponse": {
-        "required": [
-        "couriers"
-        ]
-        }*/

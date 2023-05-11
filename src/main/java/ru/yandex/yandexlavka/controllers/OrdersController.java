@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.yandexlavka.model.order.CompleteOrderRequestDto;
+import ru.yandex.yandexlavka.model.order.dto.CompleteOrderRequestDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderRequest;
 import ru.yandex.yandexlavka.model.order.OrderAssignResponse;
-import ru.yandex.yandexlavka.model.order.OrderDto;
+import ru.yandex.yandexlavka.model.order.dto.OrderDto;
 import ru.yandex.yandexlavka.services.AssignService;
 import ru.yandex.yandexlavka.services.OrdersService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

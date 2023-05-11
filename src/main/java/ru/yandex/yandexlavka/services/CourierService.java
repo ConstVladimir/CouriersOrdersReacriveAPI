@@ -1,7 +1,9 @@
 package ru.yandex.yandexlavka.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.yandexlavka.model.courier.*;
+import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 import ru.yandex.yandexlavka.repositories.CouriersRepositoryInterface;
 
 import java.util.ArrayList;
@@ -9,10 +11,13 @@ import java.util.List;
 
 @Service
 public class CourierService {
+    @Autowired
     CouriersRepositoryInterface couriersRepository;
-    CourierService(CouriersRepositoryInterface couriersRepository){this.couriersRepository=couriersRepository;}
+    @Autowired
+    MappingUtils mappingUtils;
     public CreateCouriersResponse createCouriers (CreateCourierRequest createCourierRequest){
-        List<CourierDto> courierDtoList = createCourierRequest.getCouriers().stream().map(CourierDto::getCourierDto).toList();
+        List<CourierDto> courierDtoList = createCourierRequest.getCouriers().stream()
+                .map(mappingUtils::mappingToCourierDto).toList();
         couriersRepository.saveAll(courierDtoList);
 
         CreateCouriersResponse createCouriersResponse = new CreateCouriersResponse();

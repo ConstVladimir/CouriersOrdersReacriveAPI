@@ -1,12 +1,11 @@
 package ru.yandex.yandexlavka.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.yandexlavka.model.NotFoundResponse;
 import ru.yandex.yandexlavka.model.courier.*;
-import ru.yandex.yandexlavka.model.order.kvv.OrderDB;
+import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
+import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 import ru.yandex.yandexlavka.services.CourierService;
 import ru.yandex.yandexlavka.services.OrdersService;
 

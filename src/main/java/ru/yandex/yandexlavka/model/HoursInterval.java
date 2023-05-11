@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class HoursInterval {
     final int start;
     final int end;
+    final int intervalValue;
     final String intervalString;
 
     public HoursInterval(@NotNull String intervalString){
@@ -15,17 +16,22 @@ public class HoursInterval {
 
         start = Integer.parseInt(splitIntervalString[0])*60 + Integer.parseInt(splitIntervalString[1]);
 
-        if (start > 0 && splitIntervalString[2].equals("00") && splitIntervalString[3].equals("00"))
+        if (splitIntervalString[2].equals("00") && splitIntervalString[3].equals("00"))
             end = 1440;
         else
             end = Integer.parseInt(splitIntervalString[2])*60 + Integer.parseInt(splitIntervalString[3]);
 
         if (start > end) throw new RuntimeException("HoursInterval constructor: start.isAfter(end)");
+
+        intervalValue = end - start;
     }
 
     public HoursInterval (int startInMin, int endInMin){
         start = startInMin;
         end = endInMin;
+
+        if (start > end) throw new RuntimeException("HoursInterval constructor: start.isAfter(end)");
+
         int var;
         String HHstart;
         String MMstart;
@@ -42,6 +48,7 @@ public class HoursInterval {
         else MMend = String.valueOf(var);
 
         intervalString = String.join("", HHstart, ":", MMstart,"-",HHend,":",MMend);
+        intervalValue = end - start;
     }
 
     boolean isIntersect (@NotNull HoursInterval twoInterval){

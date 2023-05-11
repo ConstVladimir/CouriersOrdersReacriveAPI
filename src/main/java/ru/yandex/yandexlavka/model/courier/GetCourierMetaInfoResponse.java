@@ -2,7 +2,8 @@ package ru.yandex.yandexlavka.model.courier;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.yandexlavka.model.order.kvv.OrderDB;
+import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
+import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

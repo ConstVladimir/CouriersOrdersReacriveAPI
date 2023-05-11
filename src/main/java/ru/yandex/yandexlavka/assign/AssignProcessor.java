@@ -1,14 +1,12 @@
 package ru.yandex.yandexlavka.assign;
 
-import ru.yandex.yandexlavka.model.courier.CourierDto;
-import ru.yandex.yandexlavka.model.order.kvv.OrderDB;
+import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
+import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class AssignProcessor {
     private final List<CourierDto> courierList;
@@ -42,8 +40,8 @@ public class AssignProcessor {
         HashMap<Integer, HashSet<Long>> hashMap = new HashMap<>();
         for (OrderDB order : orderDBList){
             HashSet<Long> hashSet = hashMap.getOrDefault(order.getRegions(), new HashSet<>());
+            if (hashSet.isEmpty()) hashMap.put(order.getRegions(), hashSet);
             hashSet.add(order.getOrder_id());
-            hashMap.put(order.getRegions(), hashSet);
         }
         return hashMap;
     }
@@ -52,8 +50,8 @@ public class AssignProcessor {
         for (CourierDto courier : courierList){
             for (Integer reg : courier.getRegions()) {
                 HashSet<Long> hashSet = hashMap.getOrDefault(reg, new HashSet<>());
+                if (hashSet.isEmpty()) hashMap.put(reg, hashSet);
                 hashSet.add(courier.getCourier_id());
-                hashMap.put(reg, hashSet);
             }
         }
 

@@ -2,9 +2,12 @@ package ru.yandex.yandexlavka.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.yandexlavka.model.order.*;
-import ru.yandex.yandexlavka.model.order.kvv.OrderDB;
+import ru.yandex.yandexlavka.model.order.dto.CompleteOrderRequestDto;
+import ru.yandex.yandexlavka.model.order.dto.OrderDto;
+import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 import ru.yandex.yandexlavka.repositories.OrdersRepositoryInterface2;
 
 import java.time.LocalDate;
@@ -14,24 +17,24 @@ import java.util.Objects;
 
 @Service
 public class OrdersService {
+    @Autowired
     OrdersRepositoryInterface2 ordersRepository2;
-    OrdersService(OrdersRepositoryInterface2 ordersRepository2){
-        this.ordersRepository2=ordersRepository2;
-    }
+    @Autowired
+    MappingUtils mappingUtils;
+    OrdersService(){}
     public List<OrderDto> createOrders (CreateOrderRequest createOrderRequest){
-        List<OrderDB> orderDBList = createOrderRequest.getOrders().stream().map(OrderDB::getOrderDB).toList();
+        List<OrderDB> orderDBList = createOrderRequest.getOrders().stream().map(mappingUtils::mappingToOrderDB).toList();
         ordersRepository2.saveAll(orderDBList);
-        List<OrderDto> orderDtoList = orderDBList.stream().map(OrderDB::getOrderDto).toList();
-        return  orderDtoList;
+        return orderDBList.stream().map(mappingUtils::mappingToOrderDto).toList();
     }
     public List<OrderDto> getOrdersResponse (int limit, int offset){
         return ordersRepository2.findAllOffsetLimit(offset, limit)
                 .stream()
-                .map(OrderDB::getOrderDto)
+                .map(mappingUtils::mappingToOrderDto)
                 .toList();
     }
     public OrderDto getOrderById(long id){
-        return ordersRepository2.findById(id).get().getOrderDto();
+        return mappingUtils.mappingToOrderDto(ordersRepository2.findById(id).get());
     }
     public ArrayList<OrderDto> completeOrders  (CompleteOrderRequestDto completeOrderRequestDto) {
         ArrayList<OrderDto> orderDtoArrayList = new ArrayList<>();
@@ -42,7 +45,7 @@ public class OrdersService {
                     || !Objects.equals(existOrderDB.getCourier_id(), completeOrder.getCourier_id())) throw new EntityNotFoundException("Another courier_id");
 
             existOrderDB.setCompleted_time(completeOrder.getComplete_time());
-            orderDtoArrayList.add(existOrderDB.getOrderDto());
+            orderDtoArrayList.add(mappingUtils.mappingToOrderDto(existOrderDB));
         }
         return orderDtoArrayList;
     }
