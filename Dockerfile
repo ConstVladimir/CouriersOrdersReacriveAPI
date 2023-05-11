@@ -5,7 +5,7 @@ RUN gradle build -x test -x checkstyleTest --no-daemon
 
 FROM openjdk:17.0.1-jdk-slim
 
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE="--from=build /home/gradle/src/build/libs/*.jar"
 
 WORKDIR /opt/app
 
