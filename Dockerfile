@@ -1,8 +1,8 @@
-FROM openjdk:17.0.1-jdk-slim AS build
+FROM gradle:7.6.1-jdk17 AS build
 
 COPY . /home/gradlew/src
 WORKDIR /home/gradlew/src
-RUN ./gradlew build
+RUN gradle build
 
 FROM openjdk:17.0.1-jdk-slim AS production
 
