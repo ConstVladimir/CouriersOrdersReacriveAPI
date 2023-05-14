@@ -73,7 +73,6 @@ public class AssignProcessor {
             Region addRegion = new Region(regAndNumbOrders.getKey());
             addRegion.setOrderDBs(regAndNumbOrders.getValue());
             addRegion.setCouriers( mapOrdersRegionsAndCouriersThere.getOrDefault(regAndNumbOrders.getKey(), new HashSet<>()));
-            addRegion.setMapOrderAndMapCourierAndIntersectIntervals();
             hashMap.put(regAndNumbOrders.getKey(),addRegion);
         }
         return hashMap;

@@ -4,6 +4,7 @@ import ru.yandex.yandexlavka.model.courier.Courier;
 import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Region {
     Integer number;
@@ -11,11 +12,7 @@ public class Region {
     Courier[] couriersMass;
     Set<OrderDB> orderDBs;
     OrderDB[] orderDBsMass;
-    Set<OrderDB> mustNotDeliveryOrders = new HashSet<>();
-    HashMap <Long, HashMap<Long, List<HoursInterval>>> mapOrderAndMapCourierAndIntersectIntervals = new HashMap<>();
-
-    private int amountMembersInSGr = 1;
-    ArrayList<Integer> lastSGr = new ArrayList<>();
+    Set<OrderDB> canNotBeSentOrders = new HashSet<>();
     Region (Integer number){this.number = number;}
     public void setCouriers (Set<Courier> couriers){
         this.couriers = couriers;
@@ -25,7 +22,8 @@ public class Region {
         this.orderDBs = orderDBs;
         orderDBsMass = (OrderDB[]) orderDBs.toArray();
     }
-    public void setMapOrderAndMapCourierAndIntersectIntervals (){
+    public HashMap <Long, HashMap<Long, List<HoursInterval>>> getMapOrderAndMapCourierAndIntersectIntervals (){
+        HashMap <Long, HashMap<Long, List<HoursInterval>>> hashMap = new HashMap<>();
         for (OrderDB order : orderDBs){
             HashMap<Long, List<HoursInterval>> mapCouriersAndIntersects = new HashMap<>();
             for (Courier courier : couriers){
@@ -37,11 +35,20 @@ public class Region {
                 }
             }
             if (mapCouriersAndIntersects.isEmpty()) {
-                mustNotDeliveryOrders.add(order);
+                canNotBeSentOrders.add(order);
                 orderDBs.remove(order);
             }
-            else mapOrderAndMapCourierAndIntersectIntervals.put(order.getOrder_id(), mapCouriersAndIntersects);
+            else hashMap.put(order.getOrder_id(), mapCouriersAndIntersects);
         }
+        return hashMap;
+    }
+    private boolean isIntersectCourierAndOrder (Courier courier, OrderDB order){
+        for (HoursInterval orderInterval : order.getDelivery_time_intervals()){
+            for (HoursInterval courierInterval : courier.getWorking_time_intervals()){
+                if (orderInterval.isIntersect(courierInterval)) return true;
+            }
+        }
+        return false;
     }
     private List<HoursInterval> getHoursIntersectionCourierAndOrder (Courier courier, OrderDB order){
         ArrayList<HoursInterval> hoursIntervalArrayList = new ArrayList<>();
@@ -52,25 +59,5 @@ public class Region {
             }
         }
         return hoursIntervalArrayList;
-    }
-    public Set<Integer> getSatisfyingCouriersGroup (){
-        return new HashSet<>();
-    }
-    private boolean searchSGr (int amountMemInSGr, Integer startPos, LinkedList<Integer> needGr, Boolean flag ){
-            for (int i = startPos; i<couriersMass.length && !flag; i++){
-                needGr.addLast(i);
-                if (amountMemInSGr == 1) {
-                    flag = this.isSatisfyThisGroup(needGr);
-                }
-                else {
-                    flag = searchSGr(amountMemInSGr - 1, i+1, needGr, flag);
-                }
-                needGr.pollLast();
-            }
-        return flag;
-    }
-
-    private boolean isSatisfyThisGroup (LinkedList<Integer> needGr){
-        return false;
     }
 }
