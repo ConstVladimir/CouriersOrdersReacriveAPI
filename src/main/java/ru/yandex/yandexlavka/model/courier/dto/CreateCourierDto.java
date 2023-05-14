@@ -5,13 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class CreateCourierDto {
     @NotNull
     String courier_type;
     @NotEmpty
-    ArrayList<@NotNull Integer> regions;
+    List<@NotNull Integer> regions;
     @NotEmpty
-    ArrayList<@NotNull String> working_hours;
+    List<@NotNull String> working_hours;
 }

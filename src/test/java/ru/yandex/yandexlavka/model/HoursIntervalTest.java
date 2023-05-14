@@ -1,10 +1,9 @@
 package ru.yandex.yandexlavka.model;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.yandex.yandexlavka.assign.HoursInterval;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class HoursIntervalTest {

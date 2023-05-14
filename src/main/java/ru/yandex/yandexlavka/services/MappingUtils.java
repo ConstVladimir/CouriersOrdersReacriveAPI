@@ -1,7 +1,9 @@
 package ru.yandex.yandexlavka.services;
 
 import jakarta.validation.constraints.NotNull;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
+import ru.yandex.yandexlavka.model.courier.Courier;
 import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 import ru.yandex.yandexlavka.model.courier.dto.CreateCourierDto;
 import ru.yandex.yandexlavka.model.order.dto.CreateOrderDto;
@@ -12,6 +14,15 @@ import java.util.ArrayList;
 
 @Service
 public class MappingUtils {
+    public Courier mappingToCourier (CourierDto courierDto){
+        Courier courier = new Courier();
+        courier.setCourier_id(courierDto.getCourier_id());
+        courier.setCourier_type(courierDto.getCourier_type());
+        courier.setRegions(courierDto.getRegions());
+        courier.setWorking_hours(courierDto.getWorking_hours());
+        courier.setDeliveryTimeIntervals();
+        return courier;
+    }
     public CourierDto mappingToCourierDto (@NotNull CreateCourierDto createCourierDto){
         CourierDto courierDto = new CourierDto();
         courierDto.setCourier_type(createCourierDto.getCourier_type());

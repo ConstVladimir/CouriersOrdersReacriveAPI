@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import ru.yandex.yandexlavka.model.HoursInterval;
+import ru.yandex.yandexlavka.assign.HoursInterval;
 import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 
 import java.time.OffsetDateTime;

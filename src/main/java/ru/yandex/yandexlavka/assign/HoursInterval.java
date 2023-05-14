@@ -1,14 +1,14 @@
-package ru.yandex.yandexlavka.model;
+package ru.yandex.yandexlavka.assign;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class HoursInterval {
-    final int start;
-    final int end;
-    final int intervalValue;
-    final String intervalString;
+    final public int start;
+    final public int end;
+    final public int intervalValue;
+    final public String intervalString;
 
     public HoursInterval(@NotNull String intervalString){
         this.intervalString=intervalString;
@@ -51,11 +51,11 @@ public class HoursInterval {
         intervalValue = end - start;
     }
 
-    boolean isIntersect (@NotNull HoursInterval twoInterval){
+    public boolean isIntersect (@NotNull HoursInterval twoInterval){
         return !(this.end < twoInterval.start) && !(this.start > twoInterval.end);
     }
 
-    HoursInterval getIntersect (HoursInterval twoInterval){
+    public HoursInterval getIntersect (HoursInterval twoInterval){
         if (this.isIntersect(twoInterval)) {
             int interStart;
             int interEnd;
@@ -66,7 +66,7 @@ public class HoursInterval {
         return null;
     }
 
-    ArrayList<HoursInterval> getNotIntersectThis (HoursInterval twoInterval){
+    public ArrayList<HoursInterval> getNotIntersectThis (HoursInterval twoInterval){
         ArrayList<HoursInterval> hoursIntervalArrayList = new ArrayList<>(2);
         if (this.isIntersect(twoInterval)){
             HoursInterval intersectInterval = this.getIntersect(twoInterval);
