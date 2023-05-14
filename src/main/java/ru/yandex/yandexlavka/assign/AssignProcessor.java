@@ -71,8 +71,9 @@ public class AssignProcessor {
         HashMap<Integer, Region> hashMap = new HashMap<>(mapOrdersRegionsAndOrdersThere.size());
         for (Map.Entry<Integer,HashSet<OrderDB>> regAndNumbOrders : mapOrdersRegionsAndOrdersThere.entrySet()){
             Region addRegion = new Region(regAndNumbOrders.getKey());
-            addRegion.orderDBs = regAndNumbOrders.getValue();
-            addRegion.couriers = mapOrdersRegionsAndCouriersThere.getOrDefault(regAndNumbOrders.getKey(), new HashSet<>());
+            addRegion.setOrderDBs(regAndNumbOrders.getValue());
+            addRegion.setCouriers( mapOrdersRegionsAndCouriersThere.getOrDefault(regAndNumbOrders.getKey(), new HashSet<>()));
+            addRegion.setMapOrderAndMapCourierAndIntersectIntervals();
             hashMap.put(regAndNumbOrders.getKey(),addRegion);
         }
         return hashMap;

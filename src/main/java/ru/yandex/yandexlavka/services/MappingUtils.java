@@ -21,6 +21,7 @@ public class MappingUtils {
         courier.setRegions(courierDto.getRegions());
         courier.setWorking_hours(courierDto.getWorking_hours());
         courier.setDeliveryTimeIntervals();
+        courier.setDataAboutDelivery();
         return courier;
     }
     public CourierDto mappingToCourierDto (@NotNull CreateCourierDto createCourierDto){

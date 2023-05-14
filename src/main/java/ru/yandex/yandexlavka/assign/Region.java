@@ -1,49 +1,47 @@
 package ru.yandex.yandexlavka.assign;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import ru.yandex.yandexlavka.model.courier.Courier;
 import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Region {
     Integer number;
     Set<Courier> couriers;
+    Courier[] couriersMass;
     Set<OrderDB> orderDBs;
-
+    OrderDB[] orderDBsMass;
+    Set<OrderDB> mustNotDeliveryOrders = new HashSet<>();
     HashMap <Long, HashMap<Long, List<HoursInterval>>> mapOrderAndMapCourierAndIntersectIntervals = new HashMap<>();
-    Region (Integer number){this.number = number;}
-    Region (Integer number, Set<Courier> couriers, Set<OrderDB> orderDBs){
-        this.number = number;
-        this.couriers = couriers;
-        this.orderDBs = orderDBs;
-    }
-    private boolean isAvailableToDelivery (Courier courier, OrderDB order){
-        //if (!courier.getRegions().contains(order.getRegions())) return false;
-        if (courier.getCourier_type().equals("FOOT") && order.getWeight() > 10.0) return false;
-        if (courier.getCourier_type().equals("BIKE") && order.getWeight() > 20.0) return false;
-        if (courier.getCourier_type().equals("AUTO") && order.getWeight() > 40.0) return false;
-        return true;
-    }
 
-    private void setMapOrderAndMapCourierAndIntersectIntervals (){
+    private int amountMembersInSGr = 1;
+    ArrayList<Integer> lastSGr = new ArrayList<>();
+    Region (Integer number){this.number = number;}
+    public void setCouriers (Set<Courier> couriers){
+        this.couriers = couriers;
+        couriersMass = (Courier[]) couriers.toArray();
+    }
+    public void setOrderDBs (Set<OrderDB> orderDBs){
+        this.orderDBs = orderDBs;
+        orderDBsMass = (OrderDB[]) orderDBs.toArray();
+    }
+    public void setMapOrderAndMapCourierAndIntersectIntervals (){
         for (OrderDB order : orderDBs){
             HashMap<Long, List<HoursInterval>> mapCouriersAndIntersects = new HashMap<>();
-            mapOrderAndMapCourierAndIntersectIntervals.put(order.getOrder_id(), mapCouriersAndIntersects);
             for (Courier courier : couriers){
-                if (isAvailableToDelivery(courier, order)){
+                if (courier.isAvailableToDelivery(order)){
                     List<HoursInterval> intersections = this.getHoursIntersectionCourierAndOrder(courier, order);
                     if (!intersections.isEmpty()){
                         mapCouriersAndIntersects.put(courier.getCourier_id(), intersections);
                     }
                 }
             }
-            if (mapCouriersAndIntersects.isEmpty()) System.out.println("Must not be delivery order Id="+ order.getOrder_id());
+            if (mapCouriersAndIntersects.isEmpty()) {
+                mustNotDeliveryOrders.add(order);
+                orderDBs.remove(order);
+            }
+            else mapOrderAndMapCourierAndIntersectIntervals.put(order.getOrder_id(), mapCouriersAndIntersects);
         }
-
     }
     private List<HoursInterval> getHoursIntersectionCourierAndOrder (Courier courier, OrderDB order){
         ArrayList<HoursInterval> hoursIntervalArrayList = new ArrayList<>();
@@ -54,5 +52,25 @@ public class Region {
             }
         }
         return hoursIntervalArrayList;
+    }
+    public Set<Integer> getSatisfyingCouriersGroup (){
+        return new HashSet<>();
+    }
+    private boolean searchSGr (int amountMemInSGr, Integer startPos, LinkedList<Integer> needGr, Boolean flag ){
+            for (int i = startPos; i<couriersMass.length && !flag; i++){
+                needGr.addLast(i);
+                if (amountMemInSGr == 1) {
+                    flag = this.isSatisfyThisGroup(needGr);
+                }
+                else {
+                    flag = searchSGr(amountMemInSGr - 1, i+1, needGr, flag);
+                }
+                needGr.pollLast();
+            }
+        return flag;
+    }
+
+    private boolean isSatisfyThisGroup (LinkedList<Integer> needGr){
+        return false;
     }
 }
