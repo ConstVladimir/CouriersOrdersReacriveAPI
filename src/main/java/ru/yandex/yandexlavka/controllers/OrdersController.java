@@ -1,5 +1,6 @@
 package ru.yandex.yandexlavka.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class OrdersController {
     @Autowired
     AssignService assignService;
     @PostMapping("")
-    public ResponseEntity<List<OrderDto>> createOrders(@RequestBody CreateOrderRequest createOrderRequest) {
+    public ResponseEntity<List<OrderDto>> createOrders(@RequestBody @Valid CreateOrderRequest createOrderRequest) {
             return ResponseEntity.ok(ordersService.createOrders(createOrderRequest));
     }
     @GetMapping("/{order_id}")
@@ -34,7 +35,7 @@ public class OrdersController {
             return ResponseEntity.ok(ordersService.getOrdersResponse(limit, offset));
     }
     @PostMapping("/complete")
-    public ResponseEntity<List<OrderDto>> completeOrders (@RequestBody CompleteOrderRequestDto completeOrderRequestDto){
+    public ResponseEntity<List<OrderDto>> completeOrders (@RequestBody @Valid CompleteOrderRequestDto completeOrderRequestDto){
             return ResponseEntity.ok(ordersService.completeOrders(completeOrderRequestDto));
 
     }

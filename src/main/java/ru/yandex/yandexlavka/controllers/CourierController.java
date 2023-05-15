@@ -1,5 +1,6 @@
 package ru.yandex.yandexlavka.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CourierController {
     OrdersService ordersService;
     @PostMapping("")
     public ResponseEntity<CreateCouriersResponse> createCouriers
-            (@RequestBody CreateCourierRequest createCourierRequest) {
+            (@RequestBody @Valid CreateCourierRequest createCourierRequest) {
             return ResponseEntity.ok(courierService.createCouriers(createCourierRequest));
     }
     @GetMapping("/{courier_id}")

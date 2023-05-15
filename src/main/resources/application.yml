@@ -2,7 +2,7 @@ POSTGRES_SERVER: localhost
 POSTGRES_PORT: 5432
 POSTGRES_DB: postgres
 POSTGRES_USER: postgres
-POSTGRES_PASSWORD: postgres
+POSTGRES_PASSWORD: password
 app:
   rpm: 1
 spring:
@@ -15,7 +15,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
       javax:
         persistence:
           schema-generation.scripts.create-target: create.sql
