@@ -10,5 +10,5 @@ import java.util.ArrayList;
 @Data
 public class CreateCourierRequest {
     @NotEmpty
-    ArrayList<@NotNull CreateCourierDto> couriers;
+    Iterable<@NotNull CreateCourierDto> couriers;
 }

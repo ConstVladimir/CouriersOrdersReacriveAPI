@@ -1,7 +1,7 @@
 package ru.yandex.yandexlavka.model.courier;
 
 import lombok.Data;
-import ru.yandex.yandexlavka.assign.HoursInterval;
+import ru.yandex.yandexlavka.model.HoursInterval;
 import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 

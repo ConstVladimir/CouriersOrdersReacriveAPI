@@ -1,10 +1,10 @@
 package ru.yandex.yandexlavka.assign;
 
+import ru.yandex.yandexlavka.model.HoursInterval;
 import ru.yandex.yandexlavka.model.courier.Courier;
 import ru.yandex.yandexlavka.model.order.entity.OrderDB;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Region {
     Integer number;

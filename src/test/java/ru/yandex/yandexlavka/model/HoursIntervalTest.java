@@ -2,12 +2,10 @@ package ru.yandex.yandexlavka.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.yandex.yandexlavka.assign.HoursInterval;
 
 import java.util.ArrayList;
 
 public class HoursIntervalTest {
-
     @Test
     void isIntersectFalse(){
         HoursInterval one = new HoursInterval("10:00-12:00");
@@ -15,7 +13,6 @@ public class HoursIntervalTest {
         Assertions.assertFalse(one.isIntersect(two));
         Assertions.assertFalse(two.isIntersect(one));
     }
-
     @Test
     void isIntersectTrue(){
         HoursInterval one = new HoursInterval("10:00-12:00");
@@ -38,15 +35,13 @@ public class HoursIntervalTest {
         Assertions.assertTrue(one.isIntersect(two));
         Assertions.assertTrue(two.isIntersect(one));
     }
-
     @Test
     void  getIntersectNull (){
         HoursInterval one = new HoursInterval("10:00-12:00");
         HoursInterval two = new HoursInterval("13:00-14:00");
-        Assertions.assertEquals(null, one.getIntersect(two));
-        Assertions.assertEquals(null, two.getIntersect(one));
+        Assertions.assertNull(one.getIntersect(two));
+        Assertions.assertNull(two.getIntersect(one));
     }
-
     @Test
     void  getIntersect (){
         HoursInterval one = new HoursInterval("10:00-12:00");
@@ -69,7 +64,6 @@ public class HoursIntervalTest {
         Assertions.assertEquals("10:00-12:00", one.getIntersect(two).intervalString);
         Assertions.assertEquals("10:00-12:00", two.getIntersect(one).intervalString);
     }
-
     @Test
     void getNotIntersectThisNull (){
         HoursInterval one = new HoursInterval("10:00-12:00");
@@ -80,7 +74,6 @@ public class HoursIntervalTest {
         two = new HoursInterval("10:00-12:00");
         Assertions.assertTrue(one.getNotIntersectThis(two).isEmpty());
     }
-
     @Test
     void getNotIntersectThis (){
         HoursInterval one = new HoursInterval("10:00-12:00");
@@ -107,7 +100,5 @@ public class HoursIntervalTest {
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("10:00-10:59", result.get(0).intervalString);
         Assertions.assertEquals("11:01-12:00", result.get(1).intervalString);
-
     }
-
 }

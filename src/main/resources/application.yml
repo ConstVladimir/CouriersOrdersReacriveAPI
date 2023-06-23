@@ -6,31 +6,17 @@ POSTGRES_PASSWORD: password
 app:
   rpm: 1
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
+  r2dbc:
+    url: r2dbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    initialization-mode: always
-  jpa:
-    properties:
-      hibernate:
-        show_sql: false
-      javax:
-        persistence:
-          schema-generation.scripts.create-target: create.sql
-    hibernate:
-      ddl-auto: update
+
   cache:
     cache-names:
       - rate-limit-buckets
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=3600s
-javax:
-  persistence:
-    schema-generation:
-      scripts.action: create
-      create-source: metadata
+
 bucket4j:
   enabled: true
   filters:

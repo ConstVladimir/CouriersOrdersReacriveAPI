@@ -1,40 +1,36 @@
 package ru.yandex.yandexlavka.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.yandex.yandexlavka.model.courier.*;
 import ru.yandex.yandexlavka.model.courier.dto.CourierDto;
 import ru.yandex.yandexlavka.repositories.CouriersRepositoryInterface;
+import ru.yandex.yandexlavka.services.interfaces.CourierServiceInt;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CourierService {
+@Qualifier("courier-Service-1")
+public class CourierService implements CourierServiceInt {
     @Autowired
     CouriersRepositoryInterface couriersRepository;
     @Autowired
     MappingUtils mappingUtils;
-    public CreateCouriersResponse createCouriers (CreateCourierRequest createCourierRequest){
-        List<CourierDto> courierDtoList = createCourierRequest.getCouriers().stream()
-                .map(mappingUtils::mappingToCourierDto).toList();
-        couriersRepository.saveAll(courierDtoList);
+    public Flux<CourierDto> createCouriers (CreateCourierRequest createCourierRequest){
+        List <CourierDto> courierDtoList = new ArrayList<>();
+        createCourierRequest.getCouriers()
+                .forEach(t->courierDtoList.add(mappingUtils.mappingToCourierDto(t)));
 
-        CreateCouriersResponse createCouriersResponse = new CreateCouriersResponse();
-        createCouriersResponse.setCouriers(courierDtoList);
-        return  createCouriersResponse;
+        return  couriersRepository.saveAll(courierDtoList);
     }
-    public GetCouriersResponse getCouriersResponse (int limit, int offset){
-
-        ArrayList<CourierDto> courierDtoArrayList = new ArrayList<>(couriersRepository.findAllOffsetLimit(offset, limit));
-
-        GetCouriersResponse getCouriersResponse = new GetCouriersResponse();
-        getCouriersResponse.setCouriers(courierDtoArrayList);
-        getCouriersResponse.setOffset(offset);
-        getCouriersResponse.setLimit(limit);
-        return  getCouriersResponse;
+    public Flux<CourierDto> getCouriers(int limit, int offset){
+        return couriersRepository.findAllOffsetLimit(offset, limit);
     }
-    public CourierDto getCourierById(long id){
-        return couriersRepository.findById(id).get();
+    public Mono<CourierDto> getCourierById(long id){
+        return couriersRepository.findById(id);
     }
 }

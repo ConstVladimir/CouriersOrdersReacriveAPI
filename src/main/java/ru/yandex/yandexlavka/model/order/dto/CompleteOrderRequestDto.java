@@ -6,7 +6,7 @@ import ru.yandex.yandexlavka.model.order.CompleteOrder;
 import java.util.ArrayList;
 @Data
 public class CompleteOrderRequestDto {
-    ArrayList<CompleteOrder> complete_info;
+    Iterable<CompleteOrder> complete_info;
 }
 
 /*

@@ -1,6 +1,5 @@
 package ru.yandex.yandexlavka.model.order.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package ru.yandex.yandexlavka.assign;
+package ru.yandex.yandexlavka.model;
 
 import org.jetbrains.annotations.NotNull;
 

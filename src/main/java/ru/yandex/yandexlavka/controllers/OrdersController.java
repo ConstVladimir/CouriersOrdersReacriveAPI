@@ -1,47 +1,49 @@
 package ru.yandex.yandexlavka.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.yandex.yandexlavka.controllers.interfaces.OrderControllerInt;
 import ru.yandex.yandexlavka.model.order.dto.CompleteOrderRequestDto;
 import ru.yandex.yandexlavka.model.order.CreateOrderRequest;
 import ru.yandex.yandexlavka.model.order.OrderAssignResponse;
 import ru.yandex.yandexlavka.model.order.dto.OrderDto;
-import ru.yandex.yandexlavka.services.AssignService;
-import ru.yandex.yandexlavka.services.OrdersService;
+import ru.yandex.yandexlavka.services.interfaces.AssignServiceInt;
+import ru.yandex.yandexlavka.services.interfaces.OrdersServiceInt;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/orders")
-public class OrdersController {
-    @Autowired
-    OrdersService ordersService;
-    @Autowired
-    AssignService assignService;
+@ResponseStatus(HttpStatus.OK)
+public class OrdersController implements OrderControllerInt {
+    @Qualifier("orders-Service-1")
+    OrdersServiceInt ordersService;
+    @Qualifier("assign-Service-1")
+    AssignServiceInt assignService;
     @PostMapping("")
-    public ResponseEntity<List<OrderDto>> createOrders(@RequestBody @Valid CreateOrderRequest createOrderRequest) {
-            return ResponseEntity.ok(ordersService.createOrders(createOrderRequest));
+    public Flux<OrderDto> createOrders(@RequestBody CreateOrderRequest createOrderRequest) {
+            return ordersService.createOrders(createOrderRequest);
     }
     @GetMapping("/{order_id}")
-    public ResponseEntity<OrderDto> getOrders(@PathVariable long order_id){
-            return ResponseEntity.ok(ordersService.getOrderById(order_id));
+    public Mono<OrderDto> getOrders(@PathVariable long order_id){
+        return ordersService.getOrderById(order_id);
     }
     @GetMapping("")
-    public ResponseEntity<List<OrderDto>> getOrders(@RequestParam(required = false, defaultValue = "1") Integer limit, @RequestParam(required = false, defaultValue = "0") Integer offset){
-            return ResponseEntity.ok(ordersService.getOrdersResponse(limit, offset));
+    public Flux<OrderDto> getOrders(@RequestParam(required = false, defaultValue = "1") int limit, @RequestParam(required = false, defaultValue = "0") int offset){
+            return ordersService.getOrders(limit, offset);
     }
     @PostMapping("/complete")
-    public ResponseEntity<List<OrderDto>> completeOrders (@RequestBody @Valid CompleteOrderRequestDto completeOrderRequestDto){
-            return ResponseEntity.ok(ordersService.completeOrders(completeOrderRequestDto));
-
+    public Flux<OrderDto> completeOrders (@RequestBody CompleteOrderRequestDto completeOrderRequestDto){
+            return ordersService.completeOrders(completeOrderRequestDto);
     }
     @PostMapping("/assign")
-    public ResponseEntity<List<OrderAssignResponse>> ordersAssign (@RequestParam(required = false) LocalDate date){
+    @ResponseStatus(HttpStatus.CREATED)
+    public Flux<OrderAssignResponse> ordersAssign (@RequestParam(required = false) LocalDate date){
             if (date == null) date = LocalDate.now();
-            return ResponseEntity.status(HttpStatus.CREATED).body(assignService.getOrderAssignResponse(date));
+            return assignService.getOrderAssignResponse(date);
     }
 }
